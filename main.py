@@ -1,0 +1,214 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+#
+#  main.py
+#  
+#  Copyright 2017 Patrice <patrice.chirouze@free.fr>
+#  
+#  This program is free software; you can redistribute it and/or modify
+#  it under the terms of the GNU General Public License as published by
+#  the Free Software Foundation; either version 2 of the License, or
+#  (at your option) any later version.
+#  
+#  This program is distributed in the hope that it will be useful,
+#  but WITHOUT ANY WARRANTY; without even the implied warranty of
+#  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#  GNU General Public License for more details.
+#  
+#  You should have received a copy of the GNU General Public License
+#  along with this program; if not, write to the Free Software
+#  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
+#  MA 02110-1301, USA.
+#  
+# 
+# 
+import json
+import sys
+import time
+# --- importation du fichier de description GUI ---
+from PyQt4.QtGui import *
+from PyQt4.QtCore import * # inclut QTimer..
+
+from chauffagewipy import *
+import paho.mqtt.client as mqtt
+
+data_chauffage={}
+data_solaire = {}
+new_mes_chauffe = False
+new_mes_solaire = False
+connected = False
+
+try:
+    _fromUtf8 = QtCore.QString.fromUtf8
+except AttributeError:
+    def _fromUtf8(s):
+        return s
+       
+def on_connect(client, userdata,rc):
+    global connected
+    connected = True
+    print('Connected')
+    
+    
+def on_message(client, userdata, msg):
+    global data_chauffage, data_solaire, new_mes_chauffe, new_mes_solaire
+    print(msg.topic, msg.payload)
+    if msg.topic == '/regchauf/mesur':
+        data_chauffage = json.loads(msg.payload)
+        new_mes_chauffe = True
+    if msg.topic == '/regsol/mesur':
+        data_solaire = json.loads(msg.payload)
+        new_mes_solaire = True
+
+class myApp(QTabWidget, Ui_TabWidget):
+
+    def __init__(self, parent=None):
+        QTabWidget.__init__(self) # initialise le Qwidget principal
+        self.setupUi(parent) # Obligatoire
+
+        self.pushButton.setStyleSheet(_fromUtf8("background-color: rgb(255, 0, 0);"))
+        self.counter = 0
+        self.timer = QTimer()
+        self.timer.start(500)
+        self.connect(self.timer, SIGNAL("timeout()"), self.timerEvent)
+        self.connect(self.pushButton, SIGNAL("clicked()"), self.pushbuttonclicked)
+        self.connect(self.lineEdit, SIGNAL("returnPressed()"), self.setpointChanged)
+        self.connect(self.pushButton_quit, SIGNAL("clicked()"), self.closetab)
+        self.connect(self.pushButton_quit_2, SIGNAL("clicked()"), self.closetab)
+        self.connect(self.pushButton_quit_3, SIGNAL("clicked()"), self.closetab)
+        self.connect(self.pushButton_quit_4, SIGNAL("clicked()"), self.closetab)      
+        self.setTabEnabled(0, True)
+        self.flagtimer = False
+        self.once_time = False
+        self.van_tm1 = 0
+      
+    def pushbuttonclicked(self):
+#        print('bouton')
+        if data_chauffage['FNCT'][1] == 0:
+            print('Cde start')
+            self.clientmqtt.publish('/regchauf/cde', '1')
+        else:
+            print('Cde stop')
+            self.clientmqtt.publish('/regchauf/cde', '0')
+        self.pushButton.setStyleSheet(_fromUtf8("background-color: rgb(255, 255, 0);"))
+        self.pushButton.clearFocus()
+  
+    def setpointChanged(self):
+        self.clientmqtt.publish('/regchauf/cons', str(self.lineEdit.text()))
+        self.lineEdit.clearFocus()
+    
+    def closetab(self):
+        self.clientmqtt.publish('/regchauf/send', 'stop')
+        self.clientmqtt.publish('/regsol/send', 'stop')
+        time.sleep(1)
+        self.clientmqtt.disconnect()
+        exit()
+        
+    def timerEvent(self):
+        global connected, new_mes_chauffe, new_mes_solaire
+        if not self.flagtimer:
+            self.clientmqtt = mqtt.Client()
+            self.clientmqtt.on_connect = on_connect
+            self.clientmqtt.on_message = on_message
+#            self.clientmqtt.connect('iot.eclipse.org', 1883, 120,'192.168.0.12')
+            self.clientmqtt.connect('iot.eclipse.org', 1883, 120)
+            self.clientmqtt.subscribe('/regchauf/mesur', 0)
+            self.clientmqtt.subscribe('/regsol/mesur', 0)
+            self.lineEdit.clearFocus()
+            self.flagtimer = True
+        else:
+            self.clientmqtt.loop()
+            if connected:
+                if self.once_time is False:
+                    self.clientmqtt.publish('/regchauf/send', 'start')
+                    self.clientmqtt.publish('/regsol/send', 'start')
+                    self.once_time = True
+                if new_mes_chauffe is True: 
+# Traitement raffraichissement données Qt4 page Controle / Commande
+                    if data_chauffage['CIRC'] == 0:
+                        self.label_10.setStyleSheet(_fromUtf8("background-color: rgb(255, 0, 0);"))
+                        self.label_10.setText("A")
+                    else:
+                        self.label_10.setStyleSheet(_fromUtf8("background-color: rgb(0, 255, 0);"))
+                        self.label_10.setText('M')
+                    if data_chauffage['FNCT'][1] == 0:
+                        self.pushButton.setStyleSheet(_fromUtf8("background-color: rgb(255, 0, 0);"))
+                        self.pushButton.setText('START')
+                    else:
+                        self.pushButton.setStyleSheet(_fromUtf8("background-color: rgb(0, 255, 0);"))
+                        self.pushButton.setText('STOP')
+                        
+                    self.lcdNumber_2.setProperty("value", data_chauffage['TEMP']['T1'])
+                    self.lcdNumber_3.setProperty("value", data_chauffage['TEMP']['T2'])
+                    self.lcdNumber_4.setProperty("value", data_chauffage['TEMP']['T3'])
+                    self.progressBar.setProperty("value", data_chauffage['VANN'])
+                    self.progressBar_2.setProperty("value", data_chauffage['ELEC']['PW'])
+                    self.lcdNumber_12.setProperty("value", data_chauffage['ELEC']['CHC'])
+                    self.lcdNumber_13.setProperty("value", data_chauffage['ELEC']['CHP'])
+                    self.lcdNumber_14.setProperty('value', data_chauffage['TEMP']['T3'])      
+
+                    if self.lineEdit.hasFocus() == False:
+                        self.lineEdit.setProperty('text', data_chauffage['FNCT'][0])
+# Rafraichissement données page 'EDF'
+#                    a = data_chauffage['EDF']['HCHC']
+                    if len(data_chauffage['EDF']) > 0:
+                        self.lcdNumber.setProperty('intValue', data_chauffage['EDF']['HCHP'])
+                        self.lcdNumber_5.setProperty('intValue', data_chauffage['EDF']['HCHC'])
+                        self.lcdNumber_7.setProperty('intValue', data_chauffage['EDF']['PAPP'])
+                        self.lcdNumber_6.setProperty('intValue', data_chauffage['EDF']['IINST'])
+                        if data_chauffage['EDF']['PTEC'] == 'HC..':
+                            self.label_35.setText("Creuses")
+                            self.label_35.setStyleSheet(_fromUtf8("background-color: rgb(255, 255, 0);"))
+                        else:
+                            self.label_35.setText("Pleines")
+                            self.label_35.setStyleSheet(_fromUtf8("background-color: rgb(255, 0, 0);"))                        
+                    else:
+                        self.label_35.setText("Er.EDF")
+# Rafraichissement données page Regulation
+                    self.lcdNumber_8.setProperty('value', data_chauffage['CONS'])
+                    self.lcdNumber_11.setProperty("value", data_chauffage['TEMP']['T4'])
+                    self.lcdNumber_9.setProperty("value", data_chauffage['TEMP']['T5'])
+                    self.lcdNumber_10.setProperty("value", data_chauffage['CHAU'])
+                    if data_chauffage['VANN'] > self.van_tm1:
+                        self.label_27.setStyleSheet(_fromUtf8("color: rgb(0, 255, 0);"))
+                        self.van_tm1 = data_chauffage['VANN']
+#                        print('+')
+                    elif data_chauffage['VANN'] < self.van_tm1:
+                        self.label_28.setStyleSheet(_fromUtf8("color: rgb(0, 255, 0);"))
+                        self.van_tm1 = data_chauffage['VANN']
+#                        print('-')
+                    else:
+                        self.label_27.setStyleSheet(_fromUtf8("color: rgb(228, 239, 255);"))
+                        self.label_28.setStyleSheet(_fromUtf8("color: rgb(228, 239, 255);"))
+                    new_mes_chauffe = False
+# Refresh données solaire
+                if new_mes_solaire:
+                    self.lcdNumber_19.setProperty('value', data_solaire['T1'])
+                    self.lcdNumber_15.setProperty('value', data_solaire['T4'])
+                    self.lcdNumber_18.setProperty('value', data_solaire['T5'])
+                    self.lcdNumber_17.setProperty('value', data_solaire['T3'])
+                    self.lcdNumber_16.setProperty('value', data_solaire['T2'])
+
+                    self.lcdNumber_22.setProperty('value', data_solaire['Q'])
+                    self.lcdNumber_20.setProperty('value', data_solaire['PWR'])
+                    self.lcdNumber_23.setProperty('value', data_solaire['ENR'])
+                    if data_solaire['PMP'] == 0:
+                        self.label_36.setStyleSheet(_fromUtf8("background-color: rgb(255, 0, 0);"))
+                        self.label_36.setText("A")
+                    else:
+                        self.label_36.setStyleSheet(_fromUtf8("background-color: rgb(0, 255, 0);"))
+                        self.label_36.setText("M")
+                    new_mes_solaire = False
+                   
+
+def main(args):
+    app = QApplication(args) # crée l'objet application
+    window = QTabWidget() # crée le Widget racine
+    c = myApp(window) # appelle la classe contenant le code de l'application
+    window.show() # affiche la fenêtre QWidget
+    ret = app.exec_() # lance l'exécution de l'application
+
+if __name__ == '__main__':
+#    sys.exit(main(sys.argv))
+    main(sys.argv)
+    
