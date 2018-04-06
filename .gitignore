@@ -2,3 +2,5 @@ pylintrc
 pymakr.conf
 *.ui
 *.json
+*.pyc
+

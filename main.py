@@ -32,12 +32,17 @@ from PyQt4.QtCore import * # inclut QTimer..
 from chauffagewipy import *
 import paho.mqtt.client as mqtt
 
+# DEBUG = True
+DEBUG = False
+
+# Variables globales
 data_chauffage={}
 data_solaire = {}
 new_mes_chauffe = False
 new_mes_solaire = False
 connected = False
 
+# Utiliser par SetStyleSheet (fonction avec callback si erreur)
 try:
     _fromUtf8 = QtCore.QString.fromUtf8
 except AttributeError:
@@ -52,7 +57,7 @@ def on_connect(client, userdata,rc):
     
 def on_message(client, userdata, msg):
     global data_chauffage, data_solaire, new_mes_chauffe, new_mes_solaire
-    print(msg.topic, msg.payload)
+    if DEBUG: print(msg.topic, msg.payload)
     if msg.topic == '/regchauf/mesur':
         data_chauffage = json.loads(msg.payload)
         new_mes_chauffe = True
@@ -65,6 +70,17 @@ class myApp(QTabWidget, Ui_TabWidget):
     def __init__(self, parent=None):
         QTabWidget.__init__(self) # initialise le Qwidget principal
         self.setupUi(parent) # Obligatoire
+        self.clientmqtt = mqtt.Client()
+        self.clientmqtt.on_connect = on_connect
+        self.clientmqtt.on_message = on_message
+        try:
+            self.clientmqtt.connect('iot.eclipse.org', 1883, 120)
+            self.clientmqtt.subscribe('/regchauf/mesur', 0)
+            self.clientmqtt.subscribe('/regsol/mesur', 0)
+        except:
+            print('Pas de reseau')
+
+        self.lineEdit.clearFocus()
 
         self.pushButton.setStyleSheet(_fromUtf8("background-color: rgb(255, 0, 0);"))
         self.counter = 0
@@ -83,7 +99,6 @@ class myApp(QTabWidget, Ui_TabWidget):
         self.van_tm1 = 0
       
     def pushbuttonclicked(self):
-#        print('bouton')
         if data_chauffage['FNCT'][1] == 0:
             print('Cde start')
             self.clientmqtt.publish('/regchauf/cde', '1')
@@ -106,100 +121,87 @@ class myApp(QTabWidget, Ui_TabWidget):
         
     def timerEvent(self):
         global connected, new_mes_chauffe, new_mes_solaire
-        if not self.flagtimer:
-            self.clientmqtt = mqtt.Client()
-            self.clientmqtt.on_connect = on_connect
-            self.clientmqtt.on_message = on_message
-#            self.clientmqtt.connect('iot.eclipse.org', 1883, 120,'192.168.0.12')
-            self.clientmqtt.connect('iot.eclipse.org', 1883, 120)
-            self.clientmqtt.subscribe('/regchauf/mesur', 0)
-            self.clientmqtt.subscribe('/regsol/mesur', 0)
-            self.lineEdit.clearFocus()
-            self.flagtimer = True
-        else:
-            self.clientmqtt.loop()
-            if connected:
-                if self.once_time is False:
-                    self.clientmqtt.publish('/regchauf/send', 'start')
-                    self.clientmqtt.publish('/regsol/send', 'start')
-                    self.once_time = True
-                if new_mes_chauffe is True: 
+
+        self.clientmqtt.loop()
+        if connected:
+            if self.once_time is False:
+                self.clientmqtt.publish('/regchauf/send', 'start')
+                self.clientmqtt.publish('/regsol/send', 'start')
+                self.once_time = True
+            if new_mes_chauffe is True: 
 # Traitement raffraichissement données Qt4 page Controle / Commande
-                    if data_chauffage['CIRC'] == 0:
-                        self.label_10.setStyleSheet(_fromUtf8("background-color: rgb(255, 0, 0);"))
-                        self.label_10.setText("A")
-                    else:
-                        self.label_10.setStyleSheet(_fromUtf8("background-color: rgb(0, 255, 0);"))
-                        self.label_10.setText('M')
-                    if data_chauffage['FNCT'][1] == 0:
-                        self.pushButton.setStyleSheet(_fromUtf8("background-color: rgb(255, 0, 0);"))
-                        self.pushButton.setText('START')
-                    else:
-                        self.pushButton.setStyleSheet(_fromUtf8("background-color: rgb(0, 255, 0);"))
-                        self.pushButton.setText('STOP')
-                        
-                    self.lcdNumber_2.setProperty("value", data_chauffage['TEMP']['T1'])
-                    self.lcdNumber_3.setProperty("value", data_chauffage['TEMP']['T2'])
-                    self.lcdNumber_4.setProperty("value", data_chauffage['TEMP']['T3'])
-                    self.progressBar.setProperty("value", data_chauffage['VANN'])
-                    self.progressBar_2.setProperty("value", data_chauffage['ELEC']['PW'])
-                    self.lcdNumber_12.setProperty("value", data_chauffage['ELEC']['CHC'])
-                    self.lcdNumber_13.setProperty("value", data_chauffage['ELEC']['CHP'])
-                    self.lcdNumber_14.setProperty('value', data_chauffage['TEMP']['T3'])      
+                if data_chauffage['CIRC'] == 0:
+                    self.label_10.setStyleSheet(_fromUtf8("background-color: rgb(255, 0, 0);"))
+                    self.label_10.setText("A")
+                else:
+                    self.label_10.setStyleSheet(_fromUtf8("background-color: rgb(0, 255, 0);"))
+                    self.label_10.setText('M')
+                if data_chauffage['FNCT'][1] == 0:
+                    self.pushButton.setStyleSheet(_fromUtf8("background-color: rgb(255, 0, 0);"))
+                    self.pushButton.setText('START')
+                else:
+                    self.pushButton.setStyleSheet(_fromUtf8("background-color: rgb(0, 255, 0);"))
+                    self.pushButton.setText('STOP')
+                    
+                self.lcdNumber_2.setProperty("value", data_chauffage['TEMP']['T1'])
+                self.lcdNumber_3.setProperty("value", data_chauffage['TEMP']['T2'])
+                self.lcdNumber_4.setProperty("value", data_chauffage['TEMP']['T3'])
+                self.progressBar.setProperty("value", data_chauffage['VANN'])
+                self.progressBar_2.setProperty("value", data_chauffage['ELEC']['PW'])
+                self.lcdNumber_12.setProperty("value", data_chauffage['ELEC']['CHC'])
+                self.lcdNumber_13.setProperty("value", data_chauffage['ELEC']['CHP'])
+                self.lcdNumber_14.setProperty('value', data_chauffage['TEMP']['T3'])      
 
-                    if self.lineEdit.hasFocus() == False:
-                        self.lineEdit.setProperty('text', data_chauffage['FNCT'][0])
+                if self.lineEdit.hasFocus() == False:
+                    self.lineEdit.setProperty('text', data_chauffage['FNCT'][0])
 # Rafraichissement données page 'EDF'
-#                    a = data_chauffage['EDF']['HCHC']
-                    if len(data_chauffage['EDF']) > 0:
-                        self.lcdNumber.setProperty('intValue', data_chauffage['EDF']['HCHP'])
-                        self.lcdNumber_5.setProperty('intValue', data_chauffage['EDF']['HCHC'])
-                        self.lcdNumber_7.setProperty('intValue', data_chauffage['EDF']['PAPP'])
-                        self.lcdNumber_6.setProperty('intValue', data_chauffage['EDF']['IINST'])
-                        if data_chauffage['EDF']['PTEC'] == 'HC..':
-                            self.label_35.setText("Creuses")
-                            self.label_35.setStyleSheet(_fromUtf8("background-color: rgb(255, 255, 0);"))
-                        else:
-                            self.label_35.setText("Pleines")
-                            self.label_35.setStyleSheet(_fromUtf8("background-color: rgb(255, 0, 0);"))                        
+                if len(data_chauffage['EDF']) > 0:
+                    self.lcdNumber.setProperty('intValue', data_chauffage['EDF']['HCHP'])
+                    self.lcdNumber_5.setProperty('intValue', data_chauffage['EDF']['HCHC'])
+                    self.lcdNumber_7.setProperty('intValue', data_chauffage['EDF']['PAPP'])
+                    self.lcdNumber_6.setProperty('intValue', data_chauffage['EDF']['IINST'])
+                    if data_chauffage['EDF']['PTEC'] == 'HC..':
+                        self.label_35.setText("Creuses")
+                        self.label_35.setStyleSheet(_fromUtf8("background-color: rgb(255, 255, 0);"))
                     else:
-                        self.label_35.setText("Er.EDF")
+                        self.label_35.setText("Pleines")
+                        self.label_35.setStyleSheet(_fromUtf8("background-color: rgb(255, 0, 0);"))                        
+                else:
+                    self.label_35.setText("Er.EDF")
 # Rafraichissement données page Regulation
-                    self.lcdNumber_8.setProperty('value', data_chauffage['CONS'])
-                    self.lcdNumber_11.setProperty("value", data_chauffage['TEMP']['T4'])
-                    self.lcdNumber_9.setProperty("value", data_chauffage['TEMP']['T5'])
-                    self.lcdNumber_10.setProperty("value", data_chauffage['CHAU'])
-                    if data_chauffage['VANN'] > self.van_tm1:
-                        self.label_27.setStyleSheet(_fromUtf8("color: rgb(0, 255, 0);"))
-                        self.van_tm1 = data_chauffage['VANN']
-#                        print('+')
-                    elif data_chauffage['VANN'] < self.van_tm1:
-                        self.label_28.setStyleSheet(_fromUtf8("color: rgb(0, 255, 0);"))
-                        self.van_tm1 = data_chauffage['VANN']
-#                        print('-')
-                    else:
-                        self.label_27.setStyleSheet(_fromUtf8("color: rgb(228, 239, 255);"))
-                        self.label_28.setStyleSheet(_fromUtf8("color: rgb(228, 239, 255);"))
-                    new_mes_chauffe = False
+                self.lcdNumber_8.setProperty('value', data_chauffage['CONS'])
+                self.lcdNumber_11.setProperty("value", data_chauffage['TEMP']['T4'])
+                self.lcdNumber_9.setProperty("value", data_chauffage['TEMP']['T5'])
+                self.lcdNumber_10.setProperty("value", data_chauffage['CHAU'])
+                if data_chauffage['VANN'] > self.van_tm1:
+                    self.label_27.setStyleSheet(_fromUtf8("color: rgb(0, 255, 0);"))
+                    self.van_tm1 = data_chauffage['VANN']
+                    if DEBUG: print('+')
+                elif data_chauffage['VANN'] < self.van_tm1:
+                    self.label_28.setStyleSheet(_fromUtf8("color: rgb(0, 255, 0);"))
+                    self.van_tm1 = data_chauffage['VANN']
+                    if DEBUG: print('-')
+                else:
+                    self.label_27.setStyleSheet(_fromUtf8("color: rgb(228, 239, 255);"))
+                    self.label_28.setStyleSheet(_fromUtf8("color: rgb(228, 239, 255);"))
+                new_mes_chauffe = False
 # Refresh données solaire
-                if new_mes_solaire:
-                    self.lcdNumber_19.setProperty('value', data_solaire['T1'])
-                    self.lcdNumber_15.setProperty('value', data_solaire['T4'])
-                    self.lcdNumber_18.setProperty('value', data_solaire['T5'])
-                    self.lcdNumber_17.setProperty('value', data_solaire['T3'])
-                    self.lcdNumber_16.setProperty('value', data_solaire['T2'])
-
-                    self.lcdNumber_22.setProperty('value', data_solaire['Q'])
-                    self.lcdNumber_20.setProperty('value', data_solaire['PWR'])
-                    self.lcdNumber_23.setProperty('value', data_solaire['ENR'])
-                    if data_solaire['PMP'] == 0:
-                        self.label_36.setStyleSheet(_fromUtf8("background-color: rgb(255, 0, 0);"))
-                        self.label_36.setText("A")
-                    else:
-                        self.label_36.setStyleSheet(_fromUtf8("background-color: rgb(0, 255, 0);"))
-                        self.label_36.setText("M")
-                    new_mes_solaire = False
-                   
+            if new_mes_solaire:
+                self.lcdNumber_19.setProperty('value', data_solaire['T1'])
+                self.lcdNumber_15.setProperty('value', data_solaire['T4'])
+                self.lcdNumber_18.setProperty('value', data_solaire['T5'])
+                self.lcdNumber_17.setProperty('value', data_solaire['T3'])
+                self.lcdNumber_16.setProperty('value', data_solaire['T2'])
+                self.lcdNumber_22.setProperty('value', data_solaire['Q'])
+                self.lcdNumber_20.setProperty('value', data_solaire['PWR'])
+                self.lcdNumber_23.setProperty('value', data_solaire['ENR'])
+                if data_solaire['PMP'] == 0:
+                    self.label_36.setStyleSheet(_fromUtf8("background-color: rgb(255, 0, 0);"))
+                    self.label_36.setText("A")
+                else:
+                    self.label_36.setStyleSheet(_fromUtf8("background-color: rgb(0, 255, 0);"))
+                    self.label_36.setText("M")
+                new_mes_solaire = False
 
 def main(args):
     app = QApplication(args) # crée l'objet application
