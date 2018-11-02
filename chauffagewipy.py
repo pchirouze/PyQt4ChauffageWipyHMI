@@ -759,3 +759,4 @@ if __name__ == "__main__":
     TabWidget.show()
     sys.exit(app.exec_())
 
+
