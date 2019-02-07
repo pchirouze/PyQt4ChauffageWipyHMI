@@ -1,5 +1,5 @@
 pylintrc
 pymakr.conf
 *.pyc
-setup.pyc
+setup.py
 *.json
