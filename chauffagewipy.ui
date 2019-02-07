@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>414</width>
-    <height>369</height>
+    <height>375</height>
    </rect>
   </property>
   <property name="font">
@@ -389,7 +389,7 @@ background-color: rgb(237, 255, 240)</string>
        <x>110</x>
        <y>60</y>
        <width>271</width>
-       <height>20</height>
+       <height>16</height>
       </rect>
      </property>
      <property name="value">

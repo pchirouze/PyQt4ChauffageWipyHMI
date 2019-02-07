@@ -70,13 +70,16 @@ def on_message(client, userdata, msg):
 class myApp(QTabWidget, Ui_TabWidget):
 
     def __init__(self, parent=None):
+        global connected
+
         QTabWidget.__init__(self) # initialise le Qwidget principal
         self.setupUi(parent) # Obligatoire
         self.clientmqtt = mqtt.Client()
         self.clientmqtt.on_connect = on_connect
         self.clientmqtt.on_message = on_message
         try:
-            self.clientmqtt.connect(MQTT_SERVER, MQTT_PORT, 120)
+            self.clientmqtt.connect(MQTT_SERVER, MQTT_PORT, 120) # Fonction bloquante
+            connected = True
             self.clientmqtt.subscribe('/regchauf/mesur', 0)
             self.clientmqtt.subscribe('/regsol/mesur', 0)
         except:
@@ -211,6 +214,8 @@ class myApp(QTabWidget, Ui_TabWidget):
                     self.label_36.setStyleSheet(_fromUtf8("background-color: rgb(0, 255, 0);"))
                     self.label_36.setText("M")
                 new_mes_solaire = False
+        else:
+            print('Non connecte au serveur MQTT')
 
 def main(args):
     app = QApplication(args) # crée l'objet application
