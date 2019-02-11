@@ -68,7 +68,7 @@ def on_message(client, userdata, msg):
         new_mes_solaire = True
 
 class myApp(QTabWidget, Ui_Dialog):
-
+    
     def __init__(self, parent=None):
         global connected
 
@@ -100,6 +100,7 @@ class myApp(QTabWidget, Ui_Dialog):
         self.flagtimer = False
         self.once_time = False
         self.van_tm1 = 0
+        self.label_29.setStyleSheet(_fromUtf8("color: rgb(255, 0, 180);"))
       
     def pushbuttonclicked(self):
         if data_chauffage['FNCT'][1] == 0:
@@ -127,14 +128,14 @@ class myApp(QTabWidget, Ui_Dialog):
 
         self.clientmqtt.loop()
         if connected:
-            self.label_29.setText("Connecte a: " + MQTT_SERVER)
+            self.label_29.setText("Connecte a " + MQTT_SERVER)
             if self.once_time is False:
                 self.clientmqtt.publish('/regchauf/send', 'start')
                 self.clientmqtt.publish('/regsol/send', 'start')
                 self.once_time = True
             if new_mes_chauffe is True: 
 # Traitement raffraichissement données Qt4 page Controle / Commande
-                self.label_29.setStyleSheet(_fromUtf8("background-color: rgb(255, 255, 0);"))
+                self.label_53.setStyleSheet(_fromUtf8("background-color: rgb(0, 100, 255);"))
                 if data_chauffage['CIRC'] == 0:
                     self.label_10.setStyleSheet(_fromUtf8("background-color: rgb(255, 0, 0);"))
                     self.label_10.setText("A")
@@ -187,9 +188,10 @@ class myApp(QTabWidget, Ui_Dialog):
                 self.progressBar_3.setProperty("value", data_chauffage['VANN'])
                 new_mes_chauffe = False
             else:
-                self.label_29.setStyleSheet(_fromUtf8("background-color: rgb(0, 255, 0);"))
+                self.label_53.setStyleSheet(_fromUtf8("background-color: rgb(233, 225, 255);"))
 # Refresh données solaire
             if new_mes_solaire:
+                self.label_59.setStyleSheet(_fromUtf8("background-color: rgb(0, 100, 255);"))
                 self.lcdNumber_19.setProperty('value', data_solaire['Tcap'])
                 self.lcdNumber_15.setProperty('value', data_solaire['Taec'])
                 self.lcdNumber_18.setProperty('value', data_solaire['Trec'])
@@ -205,9 +207,11 @@ class myApp(QTabWidget, Ui_Dialog):
                     self.label_36.setStyleSheet(_fromUtf8("background-color: rgb(0, 255, 0);"))
                     self.label_36.setText("M")
                 new_mes_solaire = False
+            else:
+                self.label_59.setStyleSheet(_fromUtf8("background-color: rgb(233, 225, 255);"))                
         else:
             self.label_29.setText("Attente connexion a: " + MQTT_SERVER)
-            print('Attente connexion a:' + MQTT_SERVER)
+            print('Attente connexion a ' + MQTT_SERVER)
 
 def main(args):
     app = QApplication(args) # crée l'objet application
