@@ -29,7 +29,7 @@ import time
 from PyQt4.QtGui import *
 from PyQt4.QtCore import * # inclut QTimer..
 
-from HDMI_chauffage import *
+from HDMI_Chauffage import *
 import paho.mqtt.client as mqtt
 
 # DEBUG = True
@@ -67,37 +67,35 @@ def on_message(client, userdata, msg):
         data_solaire = json.loads(msg.payload)
         new_mes_solaire = True
 
-class myApp(QTabWidget, Ui_TabWidget):
+class myApp(QTabWidget, Ui_Dialog):
 
     def __init__(self, parent=None):
         global connected
 
-        QTabWidget.__init__(self) # initialise le Qwidget principal
+        Ui_Dialog.__init__(self) # initialise le Qwidget principal
+        QTabWidget.__init__(self)
         self.setupUi(parent) # Obligatoire
         self.clientmqtt = mqtt.Client()
         self.clientmqtt.on_connect = on_connect
         self.clientmqtt.on_message = on_message
         try:
             self.clientmqtt.connect(MQTT_SERVER, MQTT_PORT, 120) # Fonction bloquante
-            connected = True
             self.clientmqtt.subscribe('/regchauf/mesur', 0)
             self.clientmqtt.subscribe('/regsol/mesur', 0)
         except:
             print('Pas de reseau')
+            self.label_29.setText("Pas de connexion réseau")
 
         self.lineEdit.clearFocus()
 
         self.pushButton.setStyleSheet(_fromUtf8("background-color: rgb(255, 0, 0);"))
         self.counter = 0
         self.timer = QTimer()
-        self.timer.start(500)
+        self.timer.start(300)
         self.connect(self.timer, SIGNAL("timeout()"), self.timerEvent)
         self.connect(self.pushButton, SIGNAL("clicked()"), self.pushbuttonclicked)
         self.connect(self.lineEdit, SIGNAL("returnPressed()"), self.setpointChanged)
-        self.connect(self.pushButton_quit, SIGNAL("clicked()"), self.closetab)
-        self.connect(self.pushButton_quit_2, SIGNAL("clicked()"), self.closetab)
-        self.connect(self.pushButton_quit_3, SIGNAL("clicked()"), self.closetab)
-        self.connect(self.pushButton_quit_4, SIGNAL("clicked()"), self.closetab)      
+        self.connect(self.pushButton_quit, SIGNAL("clicked()"), self.closeAppli)
         self.setTabEnabled(0, True)
         self.flagtimer = False
         self.once_time = False
@@ -117,7 +115,7 @@ class myApp(QTabWidget, Ui_TabWidget):
         self.clientmqtt.publish('/regchauf/cons', str(self.lineEdit.text()))
         self.lineEdit.clearFocus()
     
-    def closetab(self):
+    def closeAppli(self):
         self.clientmqtt.publish('/regchauf/send', 'stop')
         self.clientmqtt.publish('/regsol/send', 'stop')
         time.sleep(1)
@@ -129,12 +127,14 @@ class myApp(QTabWidget, Ui_TabWidget):
 
         self.clientmqtt.loop()
         if connected:
+            self.label_29.setText("Connecte a: " + MQTT_SERVER)
             if self.once_time is False:
                 self.clientmqtt.publish('/regchauf/send', 'start')
                 self.clientmqtt.publish('/regsol/send', 'start')
                 self.once_time = True
             if new_mes_chauffe is True: 
 # Traitement raffraichissement données Qt4 page Controle / Commande
+                self.label_29.setStyleSheet(_fromUtf8("background-color: rgb(255, 255, 0);"))
                 if data_chauffage['CIRC'] == 0:
                     self.label_10.setStyleSheet(_fromUtf8("background-color: rgb(255, 0, 0);"))
                     self.label_10.setText("A")
@@ -185,18 +185,9 @@ class myApp(QTabWidget, Ui_TabWidget):
                 self.lcdNumber_9.setProperty("value", data_chauffage['TEMP']['Tcuv'])
                 self.progressBar_2.setProperty("value", data_chauffage['ELEC']['PW'])
                 self.progressBar_3.setProperty("value", data_chauffage['VANN'])
-                #if data_chauffage['VANN'] > self.van_tm1:
-                #    self.label_27.setStyleSheet(_fromUtf8("color: rgb(0, 255, 0);"))
-                #    self.van_tm1 = data_chauffage['VANN']
-                #    if DEBUG: print('+')
-                #elif data_chauffage['VANN'] < self.van_tm1:
-                #    self.label_28.setStyleSheet(_fromUtf8("color: rgb(0, 255, 0);"))
-                #    self.van_tm1 = data_chauffage['VANN']
-                #    if DEBUG: print('-')
-                #else:
-                #    self.label_27.setStyleSheet(_fromUtf8("color: rgb(228, 239, 255);"))
-                #    self.label_28.setStyleSheet(_fromUtf8("color: rgb(228, 239, 255);"))
                 new_mes_chauffe = False
+            else:
+                self.label_29.setStyleSheet(_fromUtf8("background-color: rgb(0, 255, 0);"))
 # Refresh données solaire
             if new_mes_solaire:
                 self.lcdNumber_19.setProperty('value', data_solaire['Tcap'])
@@ -208,19 +199,20 @@ class myApp(QTabWidget, Ui_TabWidget):
                 self.lcdNumber_20.setProperty('value', data_solaire['PWR'])
                 self.lcdNumber_23.setProperty('value', data_solaire['ENR'])
                 if data_solaire['PMP'] == 0:
-                    self.label_36.setStyleSheet(_fromUtf8("background-color: rgb(255, 0, 0);"))
+                    self.label_36.setStyleSheet(_fromUtf8("background-color: rgb(180, 0, 0);"))
                     self.label_36.setText("A")
                 else:
                     self.label_36.setStyleSheet(_fromUtf8("background-color: rgb(0, 255, 0);"))
                     self.label_36.setText("M")
                 new_mes_solaire = False
         else:
-            print('Non connecte au serveur MQTT')
+            self.label_29.setText("Attente connexion a: " + MQTT_SERVER)
+            print('Attente connexion a:' + MQTT_SERVER)
 
 def main(args):
     app = QApplication(args) # crée l'objet application
-    window = QTabWidget() # crée le Widget racine
-    c = myApp(window) # appelle la classe contenant le code de l'application
+    window = QDialog() # crée le Widget racine
+    c = myApp(window) # Crée instance de la classe contenant le code de l'application
     window.show() # affiche la fenêtre QWidget
     ret = app.exec_() # lance l'exécution de l'application
 
