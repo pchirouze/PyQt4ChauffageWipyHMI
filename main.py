@@ -29,7 +29,7 @@ import time
 from PyQt4.QtGui import *
 from PyQt4.QtCore import * # inclut QTimer..
 
-from chauffagewipy import *
+from HDMI_chauffage import *
 import paho.mqtt.client as mqtt
 
 # DEBUG = True
