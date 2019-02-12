@@ -210,8 +210,8 @@ class myApp(QTabWidget, Ui_Dialog):
             else:
                 self.label_59.setStyleSheet(_fromUtf8("background-color: rgb(233, 225, 255);"))                
         else:
-            self.label_29.setText("Attente connexion a: " + MQTT_SERVER)
-            print('Attente connexion a ' + MQTT_SERVER)
+            self.label_29.setText("Attente connexion a " + MQTT_SERVER)
+            if DEBUG: print('Attente connexion a ' + MQTT_SERVER)
 
 def main(args):
     app = QApplication(args) # crée l'objet application
