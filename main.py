@@ -91,7 +91,7 @@ class myApp(QTabWidget, Ui_Dialog):
         self.pushButton.setStyleSheet(_fromUtf8("background-color: rgb(255, 0, 0);"))
         self.counter = 0
         self.timer = QTimer()
-        self.timer.start(300)
+        self.timer.start(1000)
         self.connect(self.timer, SIGNAL("timeout()"), self.timerEvent)
         self.connect(self.pushButton, SIGNAL("clicked()"), self.pushbuttonclicked)
         self.connect(self.lineEdit, SIGNAL("returnPressed()"), self.setpointChanged)
@@ -173,10 +173,10 @@ class myApp(QTabWidget, Ui_Dialog):
                     self.lcdNumber_7.setProperty('intValue', data_chauffage['EDF']['PAPP'])
                     self.lcdNumber_6.setProperty('intValue', data_chauffage['EDF']['IINST'])
                     if data_chauffage['EDF']['PTEC'] == 'HC..':
-                        self.label_35.setText("Creuses")
+                        self.label_35.setText(_fromUtf8("Creuses"))
                         self.label_35.setStyleSheet(_fromUtf8("background-color: rgb(255, 255, 0);"))
                     else:
-                        self.label_35.setText("Pleines")
+                        self.label_35.setText(_fromUtf8("Pleines"))
                         self.label_35.setStyleSheet(_fromUtf8("background-color: rgb(255, 0, 0);"))                        
                 else:
                     self.label_35.setText("Er.EDF")
