@@ -54,7 +54,7 @@ except AttributeError:
 def on_connect(client, userdata,rc):
     global connected
     connected = True
-    print('Connected')
+    print('Connecté')
     
     
 def on_message(client, userdata, msg):
@@ -128,7 +128,7 @@ class myApp(QTabWidget, Ui_Dialog):
 
         self.clientmqtt.loop()
         if connected:
-            self.label_29.setText("Connecte a " + MQTT_SERVER)
+            self.label_29.setText(_fromUtf8("Connecté à " + MQTT_SERVER))
             if self.once_time is False:
                 self.clientmqtt.publish('/regchauf/send', 'start')
                 self.clientmqtt.publish('/regsol/send', 'start')
@@ -210,8 +210,8 @@ class myApp(QTabWidget, Ui_Dialog):
             else:
                 self.label_59.setStyleSheet(_fromUtf8("background-color: rgb(233, 225, 255);"))                
         else:
-            self.label_29.setText("Attente connexion a " + MQTT_SERVER)
-            if DEBUG: print('Attente connexion a ' + MQTT_SERVER)
+            self.label_29.setText(_fromUtf8("Attente connexion à " + MQTT_SERVER))
+            if DEBUG: print('Attente connexion à ' + MQTT_SERVER)
 
 def main(args):
     app = QApplication(args) # crée l'objet application
