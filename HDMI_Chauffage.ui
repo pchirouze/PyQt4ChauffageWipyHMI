@@ -13,13 +13,16 @@
   <property name="windowTitle">
    <string>Solaire et chauffage</string>
   </property>
+  <property name="autoFillBackground">
+   <bool>false</bool>
+  </property>
   <widget class="QTabWidget" name="tabWidget">
    <property name="geometry">
     <rect>
      <x>10</x>
      <y>10</y>
      <width>421</width>
-     <height>351</height>
+     <height>361</height>
     </rect>
    </property>
    <property name="currentIndex">
@@ -30,6 +33,9 @@
      <string>Chauffage</string>
     </attribute>
     <widget class="QGroupBox" name="groupBox">
+     <property name="enabled">
+      <bool>true</bool>
+     </property>
      <property name="geometry">
       <rect>
        <x>10</x>
@@ -38,8 +44,16 @@
        <height>141</height>
       </rect>
      </property>
+     <property name="font">
+      <font>
+       <kerning>true</kerning>
+      </font>
+     </property>
      <property name="title">
       <string>Températures</string>
+     </property>
+     <property name="flat">
+      <bool>false</bool>
      </property>
      <widget class="QLabel" name="label">
       <property name="geometry">
@@ -306,13 +320,16 @@ background-color: rgb(237, 255, 240)</string>
      <property name="geometry">
       <rect>
        <x>10</x>
-       <y>150</y>
+       <y>160</y>
        <width>391</width>
        <height>161</height>
       </rect>
      </property>
      <property name="title">
       <string>Commande, etat</string>
+     </property>
+     <property name="flat">
+      <bool>false</bool>
      </property>
      <widget class="QPushButton" name="pushButton">
       <property name="geometry">
@@ -592,6 +609,8 @@ color: rgb(0, 0, 127);</string>
       </property>
      </widget>
     </widget>
+    <zorder>groupBox_2</zorder>
+    <zorder>groupBox</zorder>
    </widget>
    <widget class="QWidget" name="tab2">
     <attribute name="title">
@@ -1902,7 +1921,7 @@ background-color: rgb(237, 255, 240)</string>
    <property name="geometry">
     <rect>
      <x>10</x>
-     <y>370</y>
+     <y>380</y>
      <width>61</width>
      <height>21</height>
     </rect>
@@ -1918,7 +1937,7 @@ background-color: rgb(237, 255, 240)</string>
    <property name="geometry">
     <rect>
      <x>50</x>
-     <y>370</y>
+     <y>380</y>
      <width>301</width>
      <height>21</height>
     </rect>
@@ -1955,7 +1974,7 @@ background-color: rgb(237, 255, 240)</string>
    <property name="geometry">
     <rect>
      <x>140</x>
-     <y>390</y>
+     <y>400</y>
      <width>15</width>
      <height>15</height>
     </rect>
@@ -1974,7 +1993,7 @@ background-color: rgb(237, 255, 240)</string>
    <property name="geometry">
     <rect>
      <x>300</x>
-     <y>390</y>
+     <y>400</y>
      <width>15</width>
      <height>15</height>
     </rect>
@@ -1993,8 +2012,8 @@ background-color: rgb(237, 255, 240)</string>
    <property name="geometry">
     <rect>
      <x>10</x>
-     <y>390</y>
-     <width>121</width>
+     <y>400</y>
+     <width>131</width>
      <height>16</height>
     </rect>
    </property>
@@ -2006,8 +2025,8 @@ background-color: rgb(237, 255, 240)</string>
    <property name="geometry">
     <rect>
      <x>190</x>
-     <y>390</y>
-     <width>101</width>
+     <y>400</y>
+     <width>111</width>
      <height>16</height>
     </rect>
    </property>

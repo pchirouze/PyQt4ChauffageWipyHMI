@@ -22,6 +22,7 @@
 #  
 # 
 # 
+
 import json
 import sys
 import time
@@ -35,7 +36,9 @@ import paho.mqtt.client as mqtt
 # DEBUG = True
 DEBUG = False
 MQTT_SERVER = 'm23.cloudmqtt.com'
-MQTT_PORT = 1883
+MQTT_PORT = 15201
+MQTT_USER = 'ixkefaip'
+MQTT_PASSW = 'Hf-lHiOHlb_p'
 
 # Variables globales
 data_chauffage={}
@@ -75,7 +78,9 @@ class myApp(QTabWidget, Ui_Dialog):
         Ui_Dialog.__init__(self) # initialise le Qwidget principal
         QTabWidget.__init__(self)
         self.setupUi(parent) # Obligatoire
-        self.clientmqtt = mqtt.Client()
+        #self.clientmqtt = mqtt.Client()
+        self.clientmqtt = mqtt.Mosquitto()  # Herite de Client
+        self.clientmqtt.username_pw_set(MQTT_USER,MQTT_PASSW)
         self.clientmqtt.on_connect = on_connect
         self.clientmqtt.on_message = on_message
         try:

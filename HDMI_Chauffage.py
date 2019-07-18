@@ -678,10 +678,10 @@ class Ui_Dialog(object):
         self.label_59.setText(_fromUtf8(""))
         self.label_59.setObjectName(_fromUtf8("label_59"))
         self.label_60 = QtGui.QLabel(Dialog)
-        self.label_60.setGeometry(QtCore.QRect(10, 390, 121, 16))
+        self.label_60.setGeometry(QtCore.QRect(10, 390, 131, 16))
         self.label_60.setObjectName(_fromUtf8("label_60"))
         self.label_61 = QtGui.QLabel(Dialog)
-        self.label_61.setGeometry(QtCore.QRect(190, 390, 101, 16))
+        self.label_61.setGeometry(QtCore.QRect(190, 390, 111, 16))
         self.label_61.setObjectName(_fromUtf8("label_61"))
 
         self.retranslateUi(Dialog)
