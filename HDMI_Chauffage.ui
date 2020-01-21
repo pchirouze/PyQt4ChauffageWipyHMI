@@ -49,6 +49,15 @@
        <kerning>true</kerning>
       </font>
      </property>
+     <property name="layoutDirection">
+      <enum>Qt::LeftToRight</enum>
+     </property>
+     <property name="autoFillBackground">
+      <bool>false</bool>
+     </property>
+     <property name="styleSheet">
+      <string notr="true"/>
+     </property>
      <property name="title">
       <string>Températures</string>
      </property>
@@ -66,7 +75,7 @@
       </property>
       <property name="font">
        <font>
-        <pointsize>10</pointsize>
+        <pointsize>11</pointsize>
        </font>
       </property>
       <property name="text">
@@ -87,7 +96,7 @@
       </property>
       <property name="font">
        <font>
-        <pointsize>10</pointsize>
+        <pointsize>11</pointsize>
        </font>
       </property>
       <property name="text">
@@ -108,7 +117,7 @@
       </property>
       <property name="font">
        <font>
-        <pointsize>10</pointsize>
+        <pointsize>11</pointsize>
        </font>
       </property>
       <property name="layoutDirection">
@@ -191,15 +200,15 @@ background-color: rgb(237, 255, 240)
      <widget class="QLabel" name="label_4">
       <property name="geometry">
        <rect>
-        <x>150</x>
+        <x>140</x>
         <y>110</y>
-        <width>91</width>
+        <width>101</width>
         <height>20</height>
        </rect>
       </property>
       <property name="font">
        <font>
-        <pointsize>10</pointsize>
+        <pointsize>11</pointsize>
        </font>
       </property>
       <property name="text">
@@ -320,13 +329,16 @@ background-color: rgb(237, 255, 240)</string>
      <property name="geometry">
       <rect>
        <x>10</x>
-       <y>160</y>
+       <y>150</y>
        <width>391</width>
-       <height>161</height>
+       <height>171</height>
       </rect>
      </property>
      <property name="title">
       <string>Commande, etat</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
      </property>
      <property name="flat">
       <bool>false</bool>
@@ -335,16 +347,19 @@ background-color: rgb(237, 255, 240)</string>
       <property name="geometry">
        <rect>
         <x>10</x>
-        <y>20</y>
+        <y>30</y>
         <width>91</width>
         <height>31</height>
        </rect>
+      </property>
+      <property name="focusPolicy">
+       <enum>Qt::ClickFocus</enum>
       </property>
       <property name="styleSheet">
        <string notr="true"/>
       </property>
       <property name="text">
-       <string notr="true">ON/OFF</string>
+       <string notr="true"/>
       </property>
       <property name="checkable">
        <bool>false</bool>
@@ -354,14 +369,18 @@ background-color: rgb(237, 255, 240)</string>
       <property name="geometry">
        <rect>
         <x>210</x>
-        <y>20</y>
+        <y>30</y>
         <width>31</width>
         <height>31</height>
        </rect>
       </property>
       <property name="font">
        <font>
-        <pointsize>10</pointsize>
+        <family>Sans Serif</family>
+        <pointsize>11</pointsize>
+        <weight>75</weight>
+        <italic>false</italic>
+        <bold>true</bold>
        </font>
       </property>
       <property name="styleSheet">
@@ -374,24 +393,33 @@ background-color: rgb(237, 255, 240)</string>
        <enum>QFrame::Raised</enum>
       </property>
       <property name="text">
-       <string>A</string>
+       <string/>
+      </property>
+      <property name="textFormat">
+       <enum>Qt::AutoText</enum>
+      </property>
+      <property name="scaledContents">
+       <bool>true</bool>
       </property>
       <property name="alignment">
        <set>Qt::AlignCenter</set>
+      </property>
+      <property name="buddy">
+       <cstring></cstring>
       </property>
      </widget>
      <widget class="QLabel" name="label_11">
       <property name="geometry">
        <rect>
         <x>0</x>
-        <y>60</y>
+        <y>70</y>
         <width>101</width>
         <height>20</height>
        </rect>
       </property>
       <property name="font">
        <font>
-        <pointsize>10</pointsize>
+        <pointsize>11</pointsize>
        </font>
       </property>
       <property name="text">
@@ -405,7 +433,7 @@ background-color: rgb(237, 255, 240)</string>
       <property name="geometry">
        <rect>
         <x>110</x>
-        <y>60</y>
+        <y>70</y>
         <width>271</width>
         <height>16</height>
        </rect>
@@ -424,13 +452,22 @@ background-color: rgb(237, 255, 240)</string>
       <property name="geometry">
        <rect>
         <x>60</x>
-        <y>90</y>
+        <y>100</y>
         <width>151</width>
         <height>21</height>
        </rect>
       </property>
+      <property name="font">
+       <font>
+        <family>Century Schoolbook L</family>
+        <pointsize>11</pointsize>
+        <weight>50</weight>
+        <italic>true</italic>
+        <bold>false</bold>
+       </font>
+      </property>
       <property name="styleSheet">
-       <string notr="true">font: 10pt &quot;Sans Serif&quot;;</string>
+       <string notr="true"/>
       </property>
       <property name="text">
        <string>Conso heures creuses </string>
@@ -456,7 +493,7 @@ background-color: rgb(237, 255, 240)</string>
       <property name="geometry">
        <rect>
         <x>210</x>
-        <y>80</y>
+        <y>90</y>
         <width>111</width>
         <height>31</height>
        </rect>
@@ -482,7 +519,7 @@ color: rgb(0, 0, 127);</string>
       <property name="geometry">
        <rect>
         <x>210</x>
-        <y>120</y>
+        <y>130</y>
         <width>111</width>
         <height>31</height>
        </rect>
@@ -508,13 +545,22 @@ color: rgb(0, 0, 127);</string>
       <property name="geometry">
        <rect>
         <x>60</x>
-        <y>130</y>
+        <y>140</y>
         <width>151</width>
         <height>21</height>
        </rect>
       </property>
+      <property name="font">
+       <font>
+        <family>Century Schoolbook L</family>
+        <pointsize>11</pointsize>
+        <weight>50</weight>
+        <italic>true</italic>
+        <bold>false</bold>
+       </font>
+      </property>
       <property name="styleSheet">
-       <string notr="true">font: 10pt &quot;Sans Serif&quot;;</string>
+       <string notr="true"/>
       </property>
       <property name="text">
        <string>Conso heures pleines</string>
@@ -540,14 +586,14 @@ color: rgb(0, 0, 127);</string>
       <property name="geometry">
        <rect>
         <x>110</x>
-        <y>30</y>
+        <y>40</y>
         <width>91</width>
         <height>20</height>
        </rect>
       </property>
       <property name="font">
        <font>
-        <pointsize>10</pointsize>
+        <pointsize>11</pointsize>
        </font>
       </property>
       <property name="text">
@@ -561,14 +607,18 @@ color: rgb(0, 0, 127);</string>
       <property name="geometry">
        <rect>
         <x>350</x>
-        <y>20</y>
+        <y>30</y>
         <width>31</width>
         <height>31</height>
        </rect>
       </property>
       <property name="font">
        <font>
-        <pointsize>10</pointsize>
+        <family>Sans Serif</family>
+        <pointsize>11</pointsize>
+        <weight>75</weight>
+        <italic>false</italic>
+        <bold>true</bold>
        </font>
       </property>
       <property name="styleSheet">
@@ -581,7 +631,13 @@ color: rgb(0, 0, 127);</string>
        <enum>QFrame::Raised</enum>
       </property>
       <property name="text">
-       <string>A</string>
+       <string/>
+      </property>
+      <property name="textFormat">
+       <enum>Qt::AutoText</enum>
+      </property>
+      <property name="scaledContents">
+       <bool>true</bool>
       </property>
       <property name="alignment">
        <set>Qt::AlignCenter</set>
@@ -591,14 +647,14 @@ color: rgb(0, 0, 127);</string>
       <property name="geometry">
        <rect>
         <x>250</x>
-        <y>30</y>
+        <y>40</y>
         <width>91</width>
         <height>20</height>
        </rect>
       </property>
       <property name="font">
        <font>
-        <pointsize>10</pointsize>
+        <pointsize>11</pointsize>
        </font>
       </property>
       <property name="text">
@@ -632,7 +688,7 @@ color: rgb(0, 0, 127);</string>
       <property name="geometry">
        <rect>
         <x>190</x>
-        <y>10</y>
+        <y>20</y>
         <width>111</width>
         <height>31</height>
        </rect>
@@ -665,7 +721,7 @@ color: rgb(250, 0, 255);</string>
       <property name="geometry">
        <rect>
         <x>190</x>
-        <y>40</y>
+        <y>50</y>
         <width>111</width>
         <height>31</height>
        </rect>
@@ -692,7 +748,7 @@ color: rgb(250, 0, 255);</string>
       <property name="geometry">
        <rect>
         <x>310</x>
-        <y>20</y>
+        <y>30</y>
         <width>31</width>
         <height>21</height>
        </rect>
@@ -708,7 +764,7 @@ color: rgb(250, 0, 255);</string>
       <property name="geometry">
        <rect>
         <x>310</x>
-        <y>50</y>
+        <y>60</y>
         <width>31</width>
         <height>21</height>
        </rect>
@@ -724,7 +780,7 @@ color: rgb(250, 0, 255);</string>
       <property name="geometry">
        <rect>
         <x>40</x>
-        <y>20</y>
+        <y>30</y>
         <width>141</width>
         <height>21</height>
        </rect>
@@ -740,7 +796,7 @@ color: rgb(250, 0, 255);</string>
       <property name="geometry">
        <rect>
         <x>40</x>
-        <y>50</y>
+        <y>60</y>
         <width>141</width>
         <height>21</height>
        </rect>
@@ -756,7 +812,7 @@ color: rgb(250, 0, 255);</string>
       <property name="geometry">
        <rect>
         <x>40</x>
-        <y>110</y>
+        <y>120</y>
         <width>61</width>
         <height>21</height>
        </rect>
@@ -772,7 +828,7 @@ color: rgb(250, 0, 255);</string>
       <property name="geometry">
        <rect>
         <x>40</x>
-        <y>80</y>
+        <y>90</y>
         <width>151</width>
         <height>21</height>
        </rect>
@@ -788,7 +844,7 @@ color: rgb(250, 0, 255);</string>
       <property name="geometry">
        <rect>
         <x>190</x>
-        <y>100</y>
+        <y>110</y>
         <width>111</width>
         <height>31</height>
        </rect>
@@ -824,7 +880,7 @@ color: rgb(250, 0, 255);</string>
       <property name="geometry">
        <rect>
         <x>310</x>
-        <y>110</y>
+        <y>120</y>
         <width>31</width>
         <height>21</height>
        </rect>
@@ -840,7 +896,7 @@ color: rgb(250, 0, 255);</string>
       <property name="geometry">
        <rect>
         <x>190</x>
-        <y>70</y>
+        <y>80</y>
         <width>111</width>
         <height>31</height>
        </rect>
@@ -877,7 +933,7 @@ color: rgb(250, 0, 255);</string>
       <property name="geometry">
        <rect>
         <x>310</x>
-        <y>80</y>
+        <y>90</y>
         <width>31</width>
         <height>21</height>
        </rect>
@@ -893,7 +949,7 @@ color: rgb(250, 0, 255);</string>
       <property name="geometry">
        <rect>
         <x>40</x>
-        <y>140</y>
+        <y>150</y>
         <width>101</width>
         <height>21</height>
        </rect>
@@ -909,7 +965,7 @@ color: rgb(250, 0, 255);</string>
       <property name="geometry">
        <rect>
         <x>220</x>
-        <y>140</y>
+        <y>150</y>
         <width>81</width>
         <height>21</height>
        </rect>
@@ -1139,7 +1195,7 @@ background-color: rgb(237, 255, 240)</string>
       <property name="geometry">
        <rect>
         <x>340</x>
-        <y>30</y>
+        <y>40</y>
         <width>21</width>
         <height>16</height>
        </rect>
@@ -1157,7 +1213,7 @@ background-color: rgb(237, 255, 240)</string>
       <property name="geometry">
        <rect>
         <x>110</x>
-        <y>30</y>
+        <y>40</y>
         <width>131</width>
         <height>20</height>
        </rect>
@@ -1178,7 +1234,7 @@ background-color: rgb(237, 255, 240)</string>
       <property name="geometry">
        <rect>
         <x>250</x>
-        <y>20</y>
+        <y>30</y>
         <width>81</width>
         <height>31</height>
        </rect>
@@ -1201,7 +1257,7 @@ background-color: rgb(237, 255, 240)</string>
       <property name="geometry">
        <rect>
         <x>140</x>
-        <y>70</y>
+        <y>80</y>
         <width>101</width>
         <height>20</height>
        </rect>
@@ -1222,7 +1278,7 @@ background-color: rgb(237, 255, 240)</string>
       <property name="geometry">
        <rect>
         <x>250</x>
-        <y>70</y>
+        <y>80</y>
         <width>131</width>
         <height>23</height>
        </rect>
@@ -1251,7 +1307,7 @@ background-color: rgb(237, 255, 240)</string>
       <rect>
        <x>200</x>
        <y>160</y>
-       <width>201</width>
+       <width>211</width>
        <height>111</height>
       </rect>
      </property>
@@ -1276,7 +1332,7 @@ background-color: rgb(237, 255, 240)</string>
        <enum>Qt::RightToLeft</enum>
       </property>
       <property name="text">
-       <string>Energie / J</string>
+       <string>Energie/J</string>
       </property>
       <property name="alignment">
        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -1607,7 +1663,7 @@ background-color: rgb(237, 255, 240)</string>
         <x>150</x>
         <y>30</y>
         <width>31</width>
-        <height>16</height>
+        <height>20</height>
        </rect>
       </property>
       <property name="font">
@@ -1616,7 +1672,7 @@ background-color: rgb(237, 255, 240)</string>
        </font>
       </property>
       <property name="text">
-       <string>L/h</string>
+       <string>l/h</string>
       </property>
      </widget>
      <widget class="QLCDNumber" name="lcdNumber_22">
@@ -1674,7 +1730,12 @@ background-color: rgb(237, 255, 240)</string>
       </property>
       <property name="font">
        <font>
-        <pointsize>10</pointsize>
+        <family>Sans Serif</family>
+        <pointsize>12</pointsize>
+        <weight>50</weight>
+        <italic>false</italic>
+        <bold>false</bold>
+        <kerning>false</kerning>
        </font>
       </property>
       <property name="styleSheet">
@@ -1687,7 +1748,10 @@ background-color: rgb(237, 255, 240)</string>
        <enum>QFrame::Raised</enum>
       </property>
       <property name="text">
-       <string>A</string>
+       <string/>
+      </property>
+      <property name="textFormat">
+       <enum>Qt::LogText</enum>
       </property>
       <property name="alignment">
        <set>Qt::AlignCenter</set>
@@ -1720,7 +1784,7 @@ background-color: rgb(237, 255, 240)</string>
       <rect>
        <x>200</x>
        <y>10</y>
-       <width>201</width>
+       <width>211</width>
        <height>141</height>
       </rect>
      </property>
@@ -1936,9 +2000,9 @@ background-color: rgb(237, 255, 240)</string>
   <widget class="QLabel" name="label_29">
    <property name="geometry">
     <rect>
-     <x>50</x>
+     <x>60</x>
      <y>380</y>
-     <width>301</width>
+     <width>271</width>
      <height>21</height>
     </rect>
    </property>
@@ -2017,6 +2081,13 @@ background-color: rgb(237, 255, 240)</string>
      <height>16</height>
     </rect>
    </property>
+   <property name="font">
+    <font>
+     <family>Century Schoolbook L</family>
+     <pointsize>11</pointsize>
+     <italic>true</italic>
+    </font>
+   </property>
    <property name="text">
     <string>Lecture Chauffage</string>
    </property>
@@ -2029,6 +2100,13 @@ background-color: rgb(237, 255, 240)</string>
      <width>111</width>
      <height>16</height>
     </rect>
+   </property>
+   <property name="font">
+    <font>
+     <family>Century Schoolbook L</family>
+     <pointsize>11</pointsize>
+     <italic>true</italic>
+    </font>
    </property>
    <property name="text">
     <string>Lecture Solaire</string>

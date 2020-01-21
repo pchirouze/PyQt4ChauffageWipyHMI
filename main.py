@@ -85,6 +85,7 @@ class myApp(QTabWidget, Ui_Dialog):
         self.clientmqtt.on_message = on_message
         try:
             self.clientmqtt.connect(MQTT_SERVER, MQTT_PORT, 120) # Fonction bloquante
+            connected = True
             self.clientmqtt.subscribe('/regchauf/mesur', 0)
             self.clientmqtt.subscribe('/regsol/mesur', 0)
         except:
@@ -220,6 +221,7 @@ class myApp(QTabWidget, Ui_Dialog):
 
 def main(args):
     app = QApplication(args) # crée l'objet application
+    app.setStyle("cleanlooks")
     window = QDialog() # crée le Widget racine
     c = myApp(window) # Crée instance de la classe contenant le code de l'application
     window.show() # affiche la fenêtre QWidget
