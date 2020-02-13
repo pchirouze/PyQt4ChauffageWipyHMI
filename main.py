@@ -24,11 +24,12 @@
 # 
 
 import json
+from PyQt5.QtWidgets import *
 import sys
 import time
 # --- importation du fichier de description GUI ---
-from PyQt4.QtGui import *
-from PyQt4.QtCore import * # inclut QTimer..
+from PyQt5.QtGui import *
+from PyQt5.QtCore import * # inclut QTimer..
 
 from HDMI_Chauffage import *
 import paho.mqtt.client as mqtt
@@ -48,13 +49,7 @@ new_mes_solaire = False
 connected = False
 
 # Utiliser par SetStyleSheet (fonction avec callback si erreur)
-try:
-    _fromUtf8 = QtCore.QString.fromUtf8
-except AttributeError:
-    def _fromUtf8(s):
-        return s
-       
-def on_connect(client, userdata,rc):
+def on_connect(self, client, userdata,rc):
     global connected
     connected = True
     print('Connecté')
@@ -94,19 +89,19 @@ class myApp(QTabWidget, Ui_Dialog):
 
         self.lineEdit.clearFocus()
 
-        self.pushButton.setStyleSheet(_fromUtf8("background-color: rgb(255, 0, 0);"))
+        self.pushButton.setStyleSheet("background-color: rgb(255, 0, 0);")
         self.counter = 0
         self.timer = QTimer()
         self.timer.start(1000)
-        self.connect(self.timer, SIGNAL("timeout()"), self.timerEvent)
-        self.connect(self.pushButton, SIGNAL("clicked()"), self.pushbuttonclicked)
-        self.connect(self.lineEdit, SIGNAL("returnPressed()"), self.setpointChanged)
-        self.connect(self.pushButton_quit, SIGNAL("clicked()"), self.closeAppli)
+        self.timer.timeout.connect(self.timerEvent)
+        self.pushButton.clicked.connect(self.pushbuttonclicked)
+        self.lineEdit.returnPressed.connect(self.setpointChanged)
+        self.pushButton_quit.clicked.connect(self.closeAppli)
         self.setTabEnabled(0, True)
         self.flagtimer = False
         self.once_time = False
         self.van_tm1 = 0
-        self.label_29.setStyleSheet(_fromUtf8("color: rgb(255, 0, 180);"))
+        self.label_29.setStyleSheet("color: rgb(255, 0, 180);")
       
     def pushbuttonclicked(self):
         if data_chauffage['FNCT'][1] == 0:
@@ -115,7 +110,7 @@ class myApp(QTabWidget, Ui_Dialog):
         else:
             print('Cde stop')
             self.clientmqtt.publish('/regchauf/cde', '0')
-        self.pushButton.setStyleSheet(_fromUtf8("background-color: rgb(255, 255, 0);"))
+        self.pushButton.setStyleSheet("background-color: rgb(255, 255, 0);")
         self.pushButton.clearFocus()
   
     def setpointChanged(self):
@@ -134,31 +129,31 @@ class myApp(QTabWidget, Ui_Dialog):
 
         self.clientmqtt.loop()
         if connected:
-            self.label_29.setText(_fromUtf8("Connecté à " + MQTT_SERVER))
+            self.label_29.setText("Connecté à " + MQTT_SERVER)
             if self.once_time is False:
                 self.clientmqtt.publish('/regchauf/send', 'start')
                 self.clientmqtt.publish('/regsol/send', 'start')
                 self.once_time = True
             if new_mes_chauffe is True: 
 # Traitement raffraichissement données Qt4 page Controle / Commande
-                self.label_53.setStyleSheet(_fromUtf8("background-color: rgb(0, 100, 255);"))
+                self.label_53.setStyleSheet("background-color: rgb(0, 100, 255);")
                 if data_chauffage['CIRC'] == 0:
-                    self.label_10.setStyleSheet(_fromUtf8("background-color: rgb(255, 0, 0);"))
+                    self.label_10.setStyleSheet("background-color: rgb(255, 0, 0);")
                     self.label_10.setText("A")
                 else:
-                    self.label_10.setStyleSheet(_fromUtf8("background-color: rgb(0, 255, 0);"))
+                    self.label_10.setStyleSheet("background-color: rgb(0, 255, 0);")
                     self.label_10.setText('M')
                 if data_chauffage['FNCT'][1] == 0:
-                    self.pushButton.setStyleSheet(_fromUtf8("background-color: rgb(255, 0, 0);"))
+                    self.pushButton.setStyleSheet("background-color: rgb(255, 0, 0);")
                     self.pushButton.setText('START')
                 else:
-                    self.pushButton.setStyleSheet(_fromUtf8("background-color: rgb(0, 255, 0);"))
+                    self.pushButton.setStyleSheet("background-color: rgb(0, 255, 0);")
                     self.pushButton.setText('STOP')
                 if data_chauffage['ELEC']['PW'] == 0 :
-                    self.label_27.setStyleSheet(_fromUtf8("background-color: rgb(255, 0, 0);"))
+                    self.label_27.setStyleSheet("background-color: rgb(255, 0, 0);")
                     self.label_27.setText("A")   
                 else :
-                    self.label_27.setStyleSheet(_fromUtf8("background-color: rgb(0, 255, 0);"))
+                    self.label_27.setStyleSheet("background-color: rgb(0, 255, 0);")
                     self.label_27.setText('M')                 
                     
                 self.lcdNumber_2.setProperty("value", data_chauffage['TEMP']['Text'])
@@ -179,11 +174,11 @@ class myApp(QTabWidget, Ui_Dialog):
                     self.lcdNumber_7.setProperty('intValue', data_chauffage['EDF']['PAPP'])
                     self.lcdNumber_6.setProperty('intValue', data_chauffage['EDF']['IINST'])
                     if data_chauffage['EDF']['PTEC'] == 'HC..':
-                        self.label_35.setText(_fromUtf8("Creuses"))
-                        self.label_35.setStyleSheet(_fromUtf8("background-color: rgb(255, 255, 0);"))
+                        self.label_35.setText("Creuses")
+                        self.label_35.setStyleSheet("background-color: rgb(255, 255, 0);")
                     else:
-                        self.label_35.setText(_fromUtf8("Pleines"))
-                        self.label_35.setStyleSheet(_fromUtf8("background-color: rgb(255, 0, 0);"))                        
+                        self.label_35.setText("Pleines")
+                        self.label_35.setStyleSheet("background-color: rgb(255, 0, 0);")                        
                 else:
                     self.label_35.setText("Er.EDF")
 # Rafraichissement données page Regulation
@@ -194,10 +189,10 @@ class myApp(QTabWidget, Ui_Dialog):
                 self.progressBar_3.setProperty("value", data_chauffage['VANN'])
                 new_mes_chauffe = False
             else:
-                self.label_53.setStyleSheet(_fromUtf8("background-color: rgb(233, 225, 255);"))
+                self.label_53.setStyleSheet("background-color: rgb(233, 225, 255);")
 # Refresh données solaire
             if new_mes_solaire:
-                self.label_59.setStyleSheet(_fromUtf8("background-color: rgb(0, 100, 255);"))
+                self.label_59.setStyleSheet("background-color: rgb(0, 100, 255);")
                 self.lcdNumber_19.setProperty('value', data_solaire['Tcap'])
                 self.lcdNumber_15.setProperty('value', data_solaire['Taec'])
                 self.lcdNumber_18.setProperty('value', data_solaire['Trec'])
@@ -207,16 +202,16 @@ class myApp(QTabWidget, Ui_Dialog):
                 self.lcdNumber_20.setProperty('value', data_solaire['PWR'])
                 self.lcdNumber_23.setProperty('value', data_solaire['ENR'])
                 if data_solaire['PMP'] == 0:
-                    self.label_36.setStyleSheet(_fromUtf8("background-color: rgb(180, 0, 0);"))
+                    self.label_36.setStyleSheet("background-color: rgb(180, 0, 0);")
                     self.label_36.setText("A")
                 else:
-                    self.label_36.setStyleSheet(_fromUtf8("background-color: rgb(0, 255, 0);"))
+                    self.label_36.setStyleSheet("background-color: rgb(0, 255, 0);")
                     self.label_36.setText("M")
                 new_mes_solaire = False
             else:
-                self.label_59.setStyleSheet(_fromUtf8("background-color: rgb(233, 225, 255);"))                
+                self.label_59.setStyleSheet("background-color: rgb(233, 225, 255);")                
         else:
-            self.label_29.setText(_fromUtf8("Attente connexion à " + MQTT_SERVER))
+            self.label_29.setText("Attente connexion à " + MQTT_SERVER)
             if DEBUG: print('Attente connexion à ' + MQTT_SERVER)
 
 def main(args):

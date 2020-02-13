@@ -26,7 +26,7 @@
     </rect>
    </property>
    <property name="currentIndex">
-    <number>0</number>
+    <number>3</number>
    </property>
    <widget class="QWidget" name="tab1">
     <attribute name="title">
@@ -505,7 +505,7 @@ color: rgb(0, 0, 127);</string>
       <property name="smallDecimalPoint">
        <bool>true</bool>
       </property>
-      <property name="numDigits">
+      <property name="digitCount">
        <number>7</number>
       </property>
       <property name="segmentStyle">
@@ -531,7 +531,7 @@ color: rgb(0, 0, 127);</string>
       <property name="smallDecimalPoint">
        <bool>true</bool>
       </property>
-      <property name="numDigits">
+      <property name="digitCount">
        <number>7</number>
       </property>
       <property name="segmentStyle">
@@ -707,7 +707,7 @@ color: rgb(250, 0, 255);</string>
       <property name="smallDecimalPoint">
        <bool>false</bool>
       </property>
-      <property name="numDigits">
+      <property name="digitCount">
        <number>8</number>
       </property>
       <property name="segmentStyle">
@@ -734,7 +734,7 @@ color: rgb(250, 0, 255);</string>
       <property name="smallDecimalPoint">
        <bool>false</bool>
       </property>
-      <property name="numDigits">
+      <property name="digitCount">
        <number>8</number>
       </property>
       <property name="segmentStyle">
@@ -863,7 +863,7 @@ color: rgb(250, 0, 255);</string>
       <property name="smallDecimalPoint">
        <bool>false</bool>
       </property>
-      <property name="numDigits">
+      <property name="digitCount">
        <number>8</number>
       </property>
       <property name="segmentStyle">
@@ -919,7 +919,7 @@ color: rgb(250, 0, 255);</string>
       <property name="smallDecimalPoint">
        <bool>false</bool>
       </property>
-      <property name="numDigits">
+      <property name="digitCount">
        <number>8</number>
       </property>
       <property name="segmentStyle">
@@ -1719,44 +1719,6 @@ background-color: rgb(237, 255, 240)</string>
        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
       </property>
      </widget>
-     <widget class="QLabel" name="label_36">
-      <property name="geometry">
-       <rect>
-        <x>110</x>
-        <y>60</y>
-        <width>31</width>
-        <height>31</height>
-       </rect>
-      </property>
-      <property name="font">
-       <font>
-        <family>Sans Serif</family>
-        <pointsize>12</pointsize>
-        <weight>50</weight>
-        <italic>false</italic>
-        <bold>false</bold>
-        <kerning>false</kerning>
-       </font>
-      </property>
-      <property name="styleSheet">
-       <string notr="true">background-color: rgb(255, 0, 0);</string>
-      </property>
-      <property name="frameShape">
-       <enum>QFrame::WinPanel</enum>
-      </property>
-      <property name="frameShadow">
-       <enum>QFrame::Raised</enum>
-      </property>
-      <property name="text">
-       <string/>
-      </property>
-      <property name="textFormat">
-       <enum>Qt::LogText</enum>
-      </property>
-      <property name="alignment">
-       <set>Qt::AlignCenter</set>
-      </property>
-     </widget>
      <widget class="QLabel" name="label_57">
       <property name="geometry">
        <rect>
@@ -1776,6 +1738,49 @@ background-color: rgb(237, 255, 240)</string>
       </property>
       <property name="alignment">
        <set>Qt::AlignCenter</set>
+      </property>
+     </widget>
+     <widget class="QLabel" name="label_36">
+      <property name="geometry">
+       <rect>
+        <x>110</x>
+        <y>60</y>
+        <width>31</width>
+        <height>31</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <family>Sans Serif</family>
+        <pointsize>11</pointsize>
+        <weight>75</weight>
+        <italic>false</italic>
+        <bold>true</bold>
+       </font>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">background-color: rgb(255, 0, 0);</string>
+      </property>
+      <property name="frameShape">
+       <enum>QFrame::WinPanel</enum>
+      </property>
+      <property name="frameShadow">
+       <enum>QFrame::Raised</enum>
+      </property>
+      <property name="text">
+       <string/>
+      </property>
+      <property name="textFormat">
+       <enum>Qt::AutoText</enum>
+      </property>
+      <property name="scaledContents">
+       <bool>true</bool>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignCenter</set>
+      </property>
+      <property name="buddy">
+       <cstring></cstring>
       </property>
      </widget>
     </widget>
@@ -2015,7 +2020,7 @@ background-color: rgb(237, 255, 240)</string>
     <enum>QFrame::NoFrame</enum>
    </property>
    <property name="text">
-    <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; color:#0000ff;&quot;&gt;Attente ...&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+    <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Attente connexion serveurM QTT&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
    </property>
    <property name="textFormat">
     <enum>Qt::AutoText</enum>
