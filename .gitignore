@@ -3,3 +3,11 @@ pymakr.conf
 *.pyc
 setup.py
 *.json
+pyqt4topyqt5-master/README.md
+pyqt4topyqt5-master/pyqt4topyqt5.py
+pyqt4topyqt5-master/.gitignore
+pyqt4topyqt5-master/LICENSE
+pyqt4topyqt5-master/qtclass.py
+qtclass.py
+pyqt4topyqt5.py
+pyqt4_to_pyqt5.log
