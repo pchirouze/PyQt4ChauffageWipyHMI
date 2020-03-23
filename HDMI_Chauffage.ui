@@ -25,8 +25,11 @@
      <height>361</height>
     </rect>
    </property>
+   <property name="focusPolicy">
+    <enum>Qt::NoFocus</enum>
+   </property>
    <property name="currentIndex">
-    <number>3</number>
+    <number>0</number>
    </property>
    <widget class="QWidget" name="tab1">
     <attribute name="title">
@@ -314,14 +317,23 @@ background-color: rgb(237, 255, 240)</string>
       <property name="inputMethodHints">
        <set>Qt::ImhDigitsOnly</set>
       </property>
+      <property name="inputMask">
+       <string notr="true"/>
+      </property>
       <property name="text">
        <string notr="true"/>
       </property>
       <property name="maxLength">
        <number>5</number>
       </property>
+      <property name="frame">
+       <bool>true</bool>
+      </property>
       <property name="alignment">
        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+      </property>
+      <property name="clearButtonEnabled">
+       <bool>false</bool>
       </property>
      </widget>
     </widget>
@@ -353,7 +365,7 @@ background-color: rgb(237, 255, 240)</string>
        </rect>
       </property>
       <property name="focusPolicy">
-       <enum>Qt::ClickFocus</enum>
+       <enum>Qt::NoFocus</enum>
       </property>
       <property name="styleSheet">
        <string notr="true"/>
@@ -2019,8 +2031,11 @@ background-color: rgb(237, 255, 240)</string>
    <property name="frameShape">
     <enum>QFrame::NoFrame</enum>
    </property>
+   <property name="frameShadow">
+    <enum>QFrame::Plain</enum>
+   </property>
    <property name="text">
-    <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Attente connexion serveurM QTT&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+    <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; color:#0000ff;&quot;&gt;Attente connexion serveurM QTT&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
    </property>
    <property name="textFormat">
     <enum>Qt::AutoText</enum>
@@ -2034,6 +2049,9 @@ background-color: rgb(237, 255, 240)</string>
      <width>79</width>
      <height>25</height>
     </rect>
+   </property>
+   <property name="focusPolicy">
+    <enum>Qt::NoFocus</enum>
    </property>
    <property name="text">
     <string>Quitter</string>
@@ -2118,6 +2136,10 @@ background-color: rgb(237, 255, 240)</string>
    </property>
   </widget>
  </widget>
+ <tabstops>
+  <tabstop>tabWidget</tabstop>
+  <tabstop>pushButton_quit</tabstop>
+ </tabstops>
  <resources/>
  <connections/>
 </ui>

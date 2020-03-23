@@ -94,14 +94,15 @@ class myApp(QTabWidget, Ui_Dialog):
         self.timer = QTimer()
         self.timer.start(1000)
         self.timer.timeout.connect(self.timerEvent)
-        self.pushButton.clicked.connect(self.pushbuttonclicked)
+        self.pushButton_quit.released.connect(self.closeAppli)
+        self.pushButton.released.connect(self.pushbuttonclicked)
         self.lineEdit.returnPressed.connect(self.setpointChanged)
-        self.pushButton_quit.clicked.connect(self.closeAppli)
         self.setTabEnabled(0, True)
         self.flagtimer = False
         self.once_time = False
         self.van_tm1 = 0
         self.label_29.setStyleSheet("color: rgb(255, 0, 180);")
+
       
     def pushbuttonclicked(self):
         if data_chauffage['FNCT'][1] == 0:
@@ -116,6 +117,7 @@ class myApp(QTabWidget, Ui_Dialog):
     def setpointChanged(self):
         self.clientmqtt.publish('/regchauf/cons', str(self.lineEdit.text()))
         self.lineEdit.clearFocus()
+
     
     def closeAppli(self):
         self.clientmqtt.publish('/regchauf/send', 'stop')
