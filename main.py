@@ -36,10 +36,18 @@ import paho.mqtt.client as mqtt
 
 # DEBUG = True
 DEBUG = False
-MQTT_SERVER = 'm23.cloudmqtt.com'
-MQTT_PORT = 15201
-MQTT_USER = 'ixkefaip'
-MQTT_PASSW = 'Hf-lHiOHlb_p'
+
+# Avec broker MQTT mosquitto sur Raspberry PI 4
+MQTT_SERVER = '88.124.136.85'
+MQTT_PORT = 17100
+MQTT_USER = ''
+MQTT_PASSW = ''
+
+# Avec broker MQTT de cloudmqtt.com payant depuis le 30/04/2020
+#MQTT_SERVER = 'm23.cloudmqtt.com'
+#MQTT_PORT = 15201
+#MQTT_USER = 'ixkefaip'
+#MQTT_PASSW = 'Hf-lHiOHlb_p'
 
 # Variables globales
 data_chauffage={}
@@ -48,7 +56,7 @@ new_mes_chauffe = False
 new_mes_solaire = False
 connected = False
 
-# Utiliser par SetStyleSheet (fonction avec callback si erreur)
+# Utiliser par MQTT (fonction avec callback si erreur)
 def on_connect(self, client, userdata,rc):
     global connected
     connected = True
@@ -80,12 +88,12 @@ class myApp(QTabWidget, Ui_Dialog):
         self.clientmqtt.on_message = on_message
         try:
             self.clientmqtt.connect(MQTT_SERVER, MQTT_PORT, 120) # Fonction bloquante
-            connected = True
+            #connected = True
             self.clientmqtt.subscribe('/regchauf/mesur', 0)
             self.clientmqtt.subscribe('/regsol/mesur', 0)
         except:
             print('Pas de reseau')
-            self.label_29.setText("Pas de connexion réseau")
+            #self.label_29.setText("Pas de connexion réseau")
 
         self.lineEdit.clearFocus()
 
