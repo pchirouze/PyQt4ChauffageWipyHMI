@@ -27,7 +27,7 @@ class Ui_Dialog(object):
         self.groupBox.setFont(font)
         self.groupBox.setLayoutDirection(QtCore.Qt.LeftToRight)
         self.groupBox.setAutoFillBackground(False)
-        self.groupBox.setStyleSheet("")
+        #self.groupBox.setStyleSheet("")
         self.groupBox.setFlat(False)
         self.groupBox.setObjectName("groupBox")
         self.label = QtWidgets.QLabel(self.groupBox)
